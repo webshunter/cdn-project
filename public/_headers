@@ -1,5 +1,7 @@
 /*
   Content-Type: application/javascript
+  Access-Control-Allow-Origin: *
 
 /chatbot.js
-  Content-Type: application/javascript 
+  Content-Type: application/javascript
+  Access-Control-Allow-Origin: * 
