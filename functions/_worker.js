@@ -1,9 +1,11 @@
 export async function onRequest(context) {
+  const url = new URL(context.request.url);
+  
   // Handle OPTIONS request for CORS preflight
   if (context.request.method === 'OPTIONS') {
     return new Response(null, {
       headers: {
-        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Origin': 'https://appstore.gugusdarmayanto.my.id',
         'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
         'Access-Control-Allow-Headers': 'X-Requested-With, content-type, Authorization',
         'Access-Control-Max-Age': '86400',
@@ -15,20 +17,30 @@ export async function onRequest(context) {
     // Get the response from the origin
     const response = await context.next();
     
-    // Clone the response so we can modify headers
-    const newResponse = new Response(response.body, response);
+    // Create new response with modified headers
+    const newHeaders = new Headers(response.headers);
     
-    // Set CORS headers
-    newResponse.headers.set('Access-Control-Allow-Origin', '*');
-    newResponse.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
-    newResponse.headers.set('Access-Control-Allow-Headers', 'X-Requested-With, content-type, Authorization');
-    
-    // Set content type for JavaScript files
-    if (context.request.url.endsWith('.js')) {
-      newResponse.headers.set('Content-Type', 'application/javascript');
+    // Set CORS headers only if they don't exist
+    if (!newHeaders.has('Access-Control-Allow-Origin')) {
+      newHeaders.set('Access-Control-Allow-Origin', 'https://appstore.gugusdarmayanto.my.id');
+    }
+    if (!newHeaders.has('Access-Control-Allow-Methods')) {
+      newHeaders.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+    }
+    if (!newHeaders.has('Access-Control-Allow-Headers')) {
+      newHeaders.set('Access-Control-Allow-Headers', 'X-Requested-With, content-type, Authorization');
     }
     
-    return newResponse;
+    // Set content type for JavaScript files
+    if (url.pathname.endsWith('.js')) {
+      newHeaders.set('Content-Type', 'application/javascript');
+    }
+    
+    return new Response(response.body, {
+      status: response.status,
+      statusText: response.statusText,
+      headers: newHeaders
+    });
   } catch (error) {
     return new Response('Error: ' + error.message, { status: 500 });
   }
