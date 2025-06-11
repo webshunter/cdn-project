@@ -15,7 +15,7 @@ const Chatbot = () => {
     script.type = 'module';
     script.textContent = `
       (async () => {
-        const { init } = await import('/chatbot.js?v=' + Date.now());
+        const { init } = await import('https://cdn-project.webshunternet.workers.dev/chatbot.js?v=' + Date.now());
         init();
       })();
     `;
