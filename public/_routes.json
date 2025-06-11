@@ -8,7 +8,7 @@
       "headers": [
         {
           "key": "Access-Control-Allow-Origin",
-          "value": "https://appstore.gugusdarmayanto.my.id"
+          "value": "*"
         },
         {
           "key": "Access-Control-Allow-Methods",
@@ -17,10 +17,6 @@
         {
           "key": "Access-Control-Allow-Headers",
           "value": "X-Requested-With, content-type, Authorization"
-        },
-        {
-          "key": "Access-Control-Allow-Credentials",
-          "value": "true"
         }
       ]
     }
