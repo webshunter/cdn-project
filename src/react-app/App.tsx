@@ -1,11 +1,38 @@
 // src/App.tsx
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import cloudflareLogo from "./assets/Cloudflare_Logo.svg";
 import honoLogo from "./assets/hono.svg";
 import "./App.css";
+
+// Chatbot component
+const Chatbot = () => {
+  useEffect(() => {
+    // Create and append script element
+    const script = document.createElement('script');
+    script.type = 'module';
+    script.textContent = `
+      (async () => {
+        const { init } = await import('/chatbot.js?v=' + Date.now());
+        init();
+      })();
+    `;
+    document.body.appendChild(script);
+
+    return () => {
+      // Cleanup
+      const widget = document.querySelector('.chatbot-widget');
+      if (widget) {
+        document.body.removeChild(widget);
+      }
+      document.body.removeChild(script);
+    };
+  }, []);
+
+  return null; // Chatbot is rendered by the script
+};
 
 function App() {
   const [count, setCount] = useState(0);
@@ -59,6 +86,9 @@ function App() {
         </p>
       </div>
       <p className="read-the-docs">Click on the logos to learn more</p>
+      
+      {/* Add Chatbot component */}
+      <Chatbot />
     </>
   );
 }
