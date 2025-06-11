@@ -445,7 +445,14 @@ class ChatBot {
                     // Send message to webhook
                     const res = await fetch("https://hook.gugusdarmayanto.my.id/webhook/0a4ca5b0-3d99-43d8-abca-ad792570f670", {
                         method: "POST",
-                        headers: { "Content-Type": "application/json" },
+                        headers: { 
+                            "Content-Type": "application/json",
+                            "Access-Control-Allow-Origin": "*",
+                            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+                            "Access-Control-Allow-Headers": "X-Requested-With, content-type, Authorization"
+                        },
+                        mode: "cors",
+                        credentials: "include",
                         body: JSON.stringify([{
                             sessionId: this.currentSessionId,
                             action: "sendMessage",
